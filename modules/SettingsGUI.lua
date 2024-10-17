@@ -14,7 +14,7 @@ local SettingsBtn; -- toggle gui button
 local media = LibStub("LibSharedMedia-3.0");
 
 -- bar shown when changing settings
-local TESTBAR = CreateFrame("StatusBar", nil, UIParent); -- flight timer bar
+local TESTBAR = CreateFrame("StatusBar", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil); -- flight timer bar
 TESTBAR:SetHeight(22);
 TESTBAR:SetWidth(200);
 TESTBAR:SetPoint("TOPLEFT",UIParent,"TOPLEFT");
@@ -78,7 +78,7 @@ local function TOPGUN_CreateSettingsGUI()
          if (ShowFlightpathCheck:GetChecked()) then
             TOPGUN_GlobalData.Settings.ShowFlightList = true;            
             -- check we're not mid-flight & at a flight point before trying to show the flight list
-            if not FlightData.IsFlying and not TOPGUN_AdvancedSettingsGUI:IsVisible() then
+            if not TOPGUN_FlightData.IsFlying and not TOPGUN_AdvancedSettingsGUI:IsVisible() then
                TOPGUN_FlightListGUI.SetToTaxi();
             end
          else
@@ -142,12 +142,12 @@ local function TOPGUN_CreateSettingsGUI()
       function()
          if (ShowTimerCheck:GetChecked()) then
             TOPGUN_GlobalData.Settings.ShowTimer = true;
-            if(FlightData.IsFlying and not TOPGUN_FlightTimeFrame:IsVisible())then
+            if(TOPGUN_FlightData.IsFlying and not TOPGUN_FlightTimeFrame:IsVisible())then
                TOPGUN_FlightTimeFrame:Show();
             end
          else
             TOPGUN_GlobalData.Settings.ShowTimer = false;
-            if (FlightData.IsFlying) then
+            if (TOPGUN_FlightData.IsFlying) then
                TOPGUN_FlightTimeFrame:Hide();
             end
          end
@@ -171,7 +171,7 @@ local function TOPGUN_CreateSettingsGUI()
       -- if we're flying, adjust the actual FlightTimerBar,
       -- if we're not flying adjust the TESTBAR
 
-      if (FlightData.IsFlying) then
+      if (TOPGUN_FlightData.IsFlying) then
 
          -- check whether we're locking or unlocking the bar
 
@@ -398,7 +398,7 @@ local function TOPGUN_CreateSettingsGUI()
       TOPGUN_FlightTimeFrame.txt:SetText(timeTxt);
       TOPGUN_FlightTimeFrame.LearningTxt:SetText("Learning Flight");
 
-      TOPGUN_BarFontDropText:SetFont(TOPGUN_GlobalData.Settings.TimerFont,10)
+      TOPGUN_BarFontDropText:SetFont(TOPGUN_GlobalData.Settings.TimerFont,10,"")
 
    end -- TextureOnClick()
 
@@ -410,7 +410,7 @@ local function TOPGUN_CreateSettingsGUI()
 
          -- create the custom font
          local newFont = CreateFont("TopGunFont"..k)
-         newFont:SetFont(v,10);
+         newFont:SetFont(v,10,"");
 
          -- set button info
          info = UIDropDownMenu_CreateInfo()
@@ -640,7 +640,7 @@ local function TOPGUN_CreateSettingsGUI()
      else
        frame:SetToTaxi();
        frame:Update(frame);
-       TOPGUN_BarFontDropText:SetFont(TOPGUN_GlobalData.Settings.TimerFont,10)
+       TOPGUN_BarFontDropText:SetFont(TOPGUN_GlobalData.Settings.TimerFont,10,"")
        frame:Show();
      end
    end
@@ -650,6 +650,13 @@ local function TOPGUN_CreateSettingsGUI()
 
       frame:ClearAllPoints();
       frame:SetPoint("BOTTOMRIGHT",TaxiFrame,"BOTTOMRIGHT",-38,80);
+   end
+   --______________________________________________________________
+
+   frame.SetToStandalone = function(self)
+
+      frame:ClearAllPoints();
+      frame:SetPoint("BOTTOMRIGHT",TOPGUN_StandaloneGUI,"BOTTOMRIGHT",-1,1);
    end
    --______________________________________________________________
 

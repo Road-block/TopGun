@@ -3,7 +3,7 @@
 --  AUTHOR: Vitruvius
 -- PURPOSE: Flight Addon
 
---[[ NOTES: VERSION - 1.3.8
+--[[ NOTES: VERSION - 1.4.0
 
             - RELEASE version
 
@@ -42,11 +42,17 @@
             1.3.7 - Code cleanup
 
             1.3.8 - tooltip fix
+            
+            1.3.9 - backdrop fix, addon load events
+           
+            1.4.0 - change perchar variable name to avoid naming collisions
+                  - cataclysm classic updates
+                  - third-party addons compatibility improvements
 ]]
 
 TOPGUN_FlightListWidth = 220;
 
-TOPGUN_FlightTimeFrame = CreateFrame("StatusBar","TOPGUN_FlightTimeFrame",UIParent); -- flight timer bar
+TOPGUN_FlightTimeFrame = CreateFrame("StatusBar","TOPGUN_FlightTimeFrame",UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil); -- flight timer bar
 
 local prefix = "\124cFFFF0066[TopGun] \124cFFFFFFFF";
 local pendingStartZone,pendingEndZone; -- filled when we successfully take a flight
@@ -125,22 +131,22 @@ local LandingHandler = function(self,event,...)
 
    -- double check if the player was flying
 
-   if (FlightData.IsFlying) then
+   if (TOPGUN_FlightData.IsFlying) then
 
-      if not FlightData.HasReset then
+      if not TOPGUN_FlightData.HasReset then
 
-         FlightData.Flights[FlightData.TotalFlights][5] = time();   -- landed timestamp
-         local flightName = FlightData.ZoneStats.LastFlightPoint;
+         TOPGUN_FlightData.Flights[TOPGUN_FlightData.TotalFlights][5] = time();   -- landed timestamp
+         local flightName = TOPGUN_FlightData.ZoneStats.LastFlightPoint;
 
          -- how long was the flight?
 
          local endTime = time();
-         local leaveTime = FlightData.ZoneStats[flightName].LastTimestamp;
+         local leaveTime = TOPGUN_FlightData.ZoneStats[flightName].LastTimestamp;
 
          local flightTime = endTime - leaveTime;
 
-         FlightData.ZoneStats[flightName].TimeFlying = FlightData.ZoneStats[flightName].TimeFlying + flightTime;
-         FlightData.TotalTime = FlightData.TotalTime + flightTime;
+         TOPGUN_FlightData.ZoneStats[flightName].TimeFlying = TOPGUN_FlightData.ZoneStats[flightName].TimeFlying + flightTime;
+         TOPGUN_FlightData.TotalTime = TOPGUN_FlightData.TotalTime + flightTime;
 
          -- update the timer if we need to
 
@@ -162,7 +168,7 @@ local LandingHandler = function(self,event,...)
 
       else 
 
-         FlightData.HasReset = false;
+         TOPGUN_FlightData.HasReset = false;
 
       end -- RESET
 
@@ -184,7 +190,7 @@ local LandingHandler = function(self,event,...)
 
       -- set flag
 
-      FlightData.IsFlying = false;
+      TOPGUN_FlightData.IsFlying = false;
 
       -- print thankyou
 
@@ -204,7 +210,7 @@ local LandingHandler = function(self,event,...)
 
       -- UPDATE THE GLOBAL
 
-      _G["FlightData"] = FlightData; 
+      _G["TOPGUN_FlightData"] = TOPGUN_FlightData;
 
       return;
 
@@ -234,7 +240,7 @@ local TakeoffHandler = function(self,event,...)
 
    if (event == "PLAYER_CONTROL_LOST") then
 
-      -- TakeTaxiNode was successful, create the timer bar & FlightData info
+      -- TakeTaxiNode was successful, create the timer bar & TOPGUN_FlightData info
 
       local destNode = tempFlightData[1];
       local currNode = tempFlightData[2];
@@ -244,24 +250,24 @@ local TakeoffHandler = function(self,event,...)
       local currentTime = tempFlightData[6];
       local endTime = tempFlightData[7];
 
-      if not FlightData.ZoneStats[destText] then
+      if not TOPGUN_FlightData.ZoneStats[destText] then
 
          -- first time taking this flight, create a blank entry
-         FlightData.ZoneStats[destText] = {TimesFlown = 0,TimeFlying = 0,TotalSpent = 0,TimeFlying = 0};
+         TOPGUN_FlightData.ZoneStats[destText] = {TimesFlown = 0,TimeFlying = 0,TotalSpent = 0,TimeFlying = 0};
          -- now update the entry like normal
       end
 
       -- fill our database with 90% of the info. 
       -- the rest will be filled on PLAYER_CONTROL_GAINED event
 
-      FlightData.ZoneStats.LastFlightPoint = destText; -- so we know which ZoneStats entry to update when we land
-      FlightData.ZoneStats[destText].TimesFlown = FlightData.ZoneStats[destText].TimesFlown + 1;
-      FlightData.ZoneStats[destText].TotalSpent = FlightData.ZoneStats[destText].TotalSpent + cost;
-      FlightData.ZoneStats[destText].LastTimestamp = time();
+      TOPGUN_FlightData.ZoneStats.LastFlightPoint = destText; -- so we know which ZoneStats entry to update when we land
+      TOPGUN_FlightData.ZoneStats[destText].TimesFlown = TOPGUN_FlightData.ZoneStats[destText].TimesFlown + 1;
+      TOPGUN_FlightData.ZoneStats[destText].TotalSpent = TOPGUN_FlightData.ZoneStats[destText].TotalSpent + cost;
+      TOPGUN_FlightData.ZoneStats[destText].LastTimestamp = time();
 
-      FlightData.TotalFlights = FlightData.TotalFlights + 1;
-      FlightData.TotalSpent = FlightData.TotalSpent + cost;
-      FlightData.IsFlying = true; -- for PLAYER_CONTROL_GAINED, also register for that event
+      TOPGUN_FlightData.TotalFlights = TOPGUN_FlightData.TotalFlights + 1;
+      TOPGUN_FlightData.TotalSpent = TOPGUN_FlightData.TotalSpent + cost;
+      TOPGUN_FlightData.IsFlying = true; -- for PLAYER_CONTROL_GAINED, also register for that event
 
       -- create a record of this flight
 
@@ -273,7 +279,7 @@ local TakeoffHandler = function(self,event,...)
 
       local FlightInfo = {startTimeStamp,startZone,cost,endZone,endTimeStamp};
 
-      table.insert(FlightData.Flights,FlightInfo);
+      table.insert(TOPGUN_FlightData.Flights,FlightInfo);
 
       -- do we know how long this flight is?
 
@@ -429,7 +435,7 @@ local TakeoffHandler = function(self,event,...)
    
       end
 
-      _G["FlightData"] = FlightData;
+      _G["TOPGUN_FlightData"] = TOPGUN_FlightData;
 
       EventFrame:UnregisterEvent("UI_ERROR_MESSAGE");
       EventFrame:UnregisterEvent("PLAYER_CONTROL_LOST");
@@ -548,23 +554,23 @@ TaxiNodeOnButtonEnter = function(...)
 
    -- if we have stats for this flight path
 
-   if (FlightData.ZoneStats[flightName]) then
+   if (TOPGUN_FlightData.ZoneStats[flightName]) then
 
-      GameTooltip:AddDoubleLine("Times Flown: ", FlightData.ZoneStats[flightName].TimesFlown, 0.8, 0.4, 0, 1, 1, 1);
-      GameTooltip:AddDoubleLine("Total Flown Time: ", returnTimeFormatted(FlightData.ZoneStats[flightName].TimeFlying), 0.8, 0.4, 0, 1, 1, 1);            
-      GameTooltip:AddDoubleLine("Total Spent: ", GetCoinTextureString(FlightData.ZoneStats[flightName].TotalSpent), 0.8, 0.4, 0, 1, 1, 1);            
+      GameTooltip:AddDoubleLine("Times Flown: ", TOPGUN_FlightData.ZoneStats[flightName].TimesFlown, 0.8, 0.4, 0, 1, 1, 1);
+      GameTooltip:AddDoubleLine("Total Flown Time: ", returnTimeFormatted(TOPGUN_FlightData.ZoneStats[flightName].TimeFlying), 0.8, 0.4, 0, 1, 1, 1);
+      GameTooltip:AddDoubleLine("Total Spent: ", GetCoinTextureString(TOPGUN_FlightData.ZoneStats[flightName].TotalSpent), 0.8, 0.4, 0, 1, 1, 1);
             
-      local lastTS = date("%d-%m-%y",FlightData.ZoneStats[flightName].LastTimestamp);
+      local lastTS = date("%d-%m-%y",TOPGUN_FlightData.ZoneStats[flightName].LastTimestamp);
       local today = date("%d-%m-%y");
 
       if (lastTS == today) then
 
                -- today
-         GameTooltip:AddDoubleLine("Last Flown: ", "today at " .. date("%H:%M",FlightData.ZoneStats[flightName].LastTimestamp), 0.8, 0.4, 0, 1, 1, 1);  
+         GameTooltip:AddDoubleLine("Last Flown: ", "today at " .. date("%H:%M",TOPGUN_FlightData.ZoneStats[flightName].LastTimestamp), 0.8, 0.4, 0, 1, 1, 1);
 
       else
 
-         GameTooltip:AddDoubleLine("Last Flown: ", date("%d-%m-%y",FlightData.ZoneStats[flightName].LastTimestamp), 0.8, 0.4, 0, 1, 1, 1);  
+         GameTooltip:AddDoubleLine("Last Flown: ", date("%d-%m-%y",TOPGUN_FlightData.ZoneStats[flightName].LastTimestamp), 0.8, 0.4, 0, 1, 1, 1);
 
       end
 
@@ -594,7 +600,7 @@ hooksecurefunc("AcceptBattlefieldPort", function()
 
 end);
 
-hooksecurefunc("ConfirmSummon", function()
+hooksecurefunc(C_SummonInfo, "ConfirmSummon", function()
 
    LandingHandler();
 

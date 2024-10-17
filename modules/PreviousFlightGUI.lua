@@ -126,7 +126,7 @@ local function TOPGUN_CreatePreviousFlightGUI()
      if (frame:IsVisible()) then
        frame:Hide();
      else
-       CurrentFlight = FlightData.TotalFlights;
+       CurrentFlight = TOPGUN_FlightData.TotalFlights;
        frame:Update(frame);
        frame:Show();
      end
@@ -173,11 +173,11 @@ TOPGUN_PreviousFlightGUI.Update = function(self)
 
    --check if there's a previous flight
 
-   if (FlightData.TotalFlights > 0) then
+   if (TOPGUN_FlightData.TotalFlights > 0) then
 
       -- get the flight data
 
-      local lastFlight = FlightData.Flights[CurrentFlight];
+      local lastFlight = TOPGUN_FlightData.Flights[CurrentFlight];
 
       local startTimestamp = lastFlight[1];
       local startZone = lastFlight[2];
@@ -187,7 +187,7 @@ TOPGUN_PreviousFlightGUI.Update = function(self)
       local flightTime = endTimestamp - startTimestamp;
 
       -- now fill it!
-      self.Heading:SetText("Previous Flights (" .. CurrentFlight .. "/" .. FlightData.TotalFlights ..")")
+      self.Heading:SetText("Previous Flights (" .. CurrentFlight .. "/" .. TOPGUN_FlightData.TotalFlights ..")")
 
       if startZone then self.FlightFromTxt:SetText(startZone) end
       if endZone then self.FlightToTxt:SetText(endZone) end
@@ -211,7 +211,7 @@ TOPGUN_PreviousFlightGUI.Update = function(self)
          self.BackBtn:SetEnabled(true);
       end
 
-      if (CurrentFlight == FlightData.TotalFlights) then
+      if (CurrentFlight == TOPGUN_FlightData.TotalFlights) then
          self.ForwardBtn:SetEnabled(false);
       else 
          self.ForwardBtn:SetEnabled(true);

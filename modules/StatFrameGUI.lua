@@ -146,6 +146,7 @@ local function TOPGUN_CreateStatFrameGUI()
       frame.Toggle();
       frame:ClearAllPoints();
       frame:SetPoint("TOPLEFT",TaxiFrame,"BOTTOMLEFT",13,75);
+      frame:SetPoint("TOPRIGHT",TaxiFrame,"BOTTOMRIGHT",-35,75);
 
    end
 
@@ -158,6 +159,7 @@ local function TOPGUN_CreateStatFrameGUI()
       frame.Toggle();
       frame:ClearAllPoints();
       frame:SetPoint("TOPLEFT",TOPGUN_StandaloneGUI,"BOTTOMLEFT",0,0);
+      frame:SetPoint("TOPRIGHT",TOPGUN_StandaloneGUI,"BOTTOMRIGHT",0,0);
 
    end
 
@@ -182,9 +184,9 @@ TOPGUN_StatFrameGUI.Update = function (self)
    local averageCost;
    local averageDuration;
    -- check we're not dividing by zero, to prevent explosion
-   if (FlightData.TotalFlights > 0) then
-      averageCost = FlightData.TotalSpent / FlightData.TotalFlights;
-      averageDuration = floor(FlightData.TotalTime / FlightData.TotalFlights);
+   if (TOPGUN_FlightData.TotalFlights > 0) then
+      averageCost = TOPGUN_FlightData.TotalSpent / TOPGUN_FlightData.TotalFlights;
+      averageDuration = floor(TOPGUN_FlightData.TotalTime / TOPGUN_FlightData.TotalFlights);
    else 
       averageCost = 0;
       averageDuration = 0;
@@ -192,11 +194,11 @@ TOPGUN_StatFrameGUI.Update = function (self)
 
    -- update the stats!
 
-   self.TotalFlightsTxt:SetText(FlightData.TotalFlights);
-   self.TotalGoldTxt:SetText(GetCoinTextureString(FlightData.TotalSpent));
+   self.TotalFlightsTxt:SetText(TOPGUN_FlightData.TotalFlights);
+   self.TotalGoldTxt:SetText(GetCoinTextureString(TOPGUN_FlightData.TotalSpent));
    self.AvgGoldTxt:SetText(GetCoinTextureString(averageCost));
    self.AvgTimeTxt:SetText(ReturnFormattedTime(averageDuration));
-   self.TotalTimeTxt:SetText(ReturnFormattedTime(FlightData.TotalTime));
+   self.TotalTimeTxt:SetText(ReturnFormattedTime(TOPGUN_FlightData.TotalTime));
 
 end -- .Update
 

@@ -1,4 +1,4 @@
-## Interface: 40401 11504
+## Interface: 40401
 ## Author: Vitruvius
 ## X-Credits: Roadblock
 ## Title: TopGun|cFFFF0066 1.4.0|r
@@ -23,6 +23,3 @@ modules\PreviousFlightGUI.lua
 modules\SettingsGUI.lua
 modules\AdvancedSettingsGUI.lua
 modules\StandaloneGUI.lua
-
-
-

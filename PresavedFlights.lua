@@ -2,7 +2,7 @@
 --    DATE: 29-10-19
 --  AUTHOR: Vitruvius
 -- PURPOSE: Load some pre-set flight times into TOPGUN_GlobalData.FlightTimes
-
+local addonName, addon = ...
 local PreloadFrame = CreateFrame("Frame",nil,UIParent); -- for events
 
 local PresavedData = {};
@@ -194,35 +194,37 @@ PresavedData.Horde = {
 
     } -- PresavedData
 
-local function PreloadHandler()
+local function PreloadHandler(_,event,...)
+	if ... == addonName then
+	   -- fills flight times if player doesn't have
 
-   -- fills flight times if player doesn't have
+	   local faction = UnitFactionGroup("player");
 
-   local faction = UnitFactionGroup("player");
+	   -- check if player already has a flight time,
+	   -- if not, add the presaved flight time
 
-   -- check if player already has a flight time,
-   -- if not, add the presaved flight time
+	   for startZone,startZoneTbl in pairs(PresavedData[faction]) do
 
-   for startZone,startZoneTbl in pairs(PresavedData[faction]) do 
+	      -- check if we have this starting zone entry
+	      if not TOPGUN_GlobalData.FlightTimes[startZone] then
+	         TOPGUN_GlobalData.FlightTimes[startZone] = {};
+	      end
 
-      -- check if we have this starting zone entry
-      if not TOPGUN_GlobalData.FlightTimes[startZone] then
-         TOPGUN_GlobalData.FlightTimes[startZone] = {};
-      end
+	      for toZone,ftime in pairs(startZoneTbl) do
 
-      for toZone,ftime in pairs(startZoneTbl) do
+	         -- check if we have this flight time
+	         if not TOPGUN_GlobalData.FlightTimes[startZone][toZone] then
+	            TOPGUN_GlobalData.FlightTimes[startZone][toZone] = ftime;
+	            --print("added a flight time! From "..startZone.." to "..toZone);
+	         end
 
-         -- check if we have this flight time
-         if not TOPGUN_GlobalData.FlightTimes[startZone][toZone] then
-            TOPGUN_GlobalData.FlightTimes[startZone][toZone] = ftime;
-            --print("added a flight time! From "..startZone.." to "..toZone);
-         end
+	      end -- for (startzone)
 
-      end -- for (startzone) 
-
-   end -- for (endzone)
+	   end -- for (endzone)
+	   PreloadFrame:UnregisterEvent("ADDON_LOADED")
+	end
 
 end -- PreloadHandler()
 
-PreloadFrame:RegisterEvent("VARIABLES_LOADED");
+PreloadFrame:RegisterEvent("ADDON_LOADED");
 PreloadFrame:SetScript("OnEvent",PreloadHandler);

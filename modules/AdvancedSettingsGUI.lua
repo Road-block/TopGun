@@ -30,7 +30,7 @@ local function TOPGUN_CreateAdvancedGUI()
          if (ShowLearningCheck:GetChecked()) then
             TOPGUN_GlobalData.Settings.ShowLearningBar = true;
 
-            if (FlightData.IsFlying) then
+            if (TOPGUN_FlightData.IsFlying) then
 
                TOPGUN_FlightTimeFrame:Show();
 
@@ -40,7 +40,7 @@ local function TOPGUN_CreateAdvancedGUI()
 
             TOPGUN_GlobalData.Settings.ShowLearningBar = false;
 
-            if (FlightData.IsFlying and TOPGUN_FlightTimeFrame:IsVisible() and TOPGUN_FlightTimeFrame.LearningTxt:IsVisible()) then
+            if (TOPGUN_FlightData.IsFlying and TOPGUN_FlightTimeFrame:IsVisible() and TOPGUN_FlightTimeFrame.LearningTxt:IsVisible()) then
 
                TOPGUN_FlightTimeFrame:Hide();
 
@@ -142,15 +142,15 @@ StaticPopupDialogs["DELETE_ALL_FLIGHT_DATA"] = {
    button2 = "No",
    OnAccept = function()
 
-      -- delete FlightData stuff
-      FlightData.TotalFlights = 0;
-      FlightData.TotalSpent = 0;
-      FlightData.TotalTime = 0;      
+      -- delete TOPGUN_FlightData stuff
+      TOPGUN_FlightData.TotalFlights = 0;
+      TOPGUN_FlightData.TotalSpent = 0;
+      TOPGUN_FlightData.TotalTime = 0;
 
-      FlightData.Flights = {};
-      FlightData.ZoneStats = {};
+      TOPGUN_FlightData.Flights = {};
+      TOPGUN_FlightData.ZoneStats = {};
 
-      FlightData.HasReset = true; -- checked on landing, so we don't update a nil flight with a landing time
+      TOPGUN_FlightData.HasReset = true; -- checked on landing, so we don't update a nil flight with a landing time
       -- update GUIs
       TOPGUN_PreviousFlightGUI:Update(TOPGUN_PreviousFlightGUI);
       TOPGUN_StatFrameGUI:Update(TOPGUN_StatFrameGUI);

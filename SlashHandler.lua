@@ -31,7 +31,9 @@ SlashCmdList["TOPGUN"] = function(cmd)
          TOPGUN_AdvancedSettingsGUI:Toggle();
          TOPGUN_SettingsGUI.Toggle();
          TOPGUN_StatFrameGUI.SetToStandalone();
-         TOPGUN_PreviousFlightGUI.SetToStandalone();         
+         TOPGUN_PreviousFlightGUI.SetToStandalone();
+         TOPGUN_SettingsGUI.SetToStandalone();
+         --TOPGUN_FlightListGUI.SetToStandalone();
 
       end
 
@@ -41,15 +43,15 @@ SlashCmdList["TOPGUN"] = function(cmd)
 
       -- TESTER FUNCTION
       
-      print(prefix .. "Total Flights: " .. FlightData.TotalFlights);
+      print(prefix .. "Total Flights: " .. TOPGUN_FlightData.TotalFlights);
 
-      if (FlightData.IsFlying) then
+      if (TOPGUN_FlightData.IsFlying) then
          print(prefix .. "Currently Flying: true");
       else
          print(prefix .. "Currently Flying: false");
       end -- IsFlying
 
-      for k,v in pairs(FlightData.Flights) do
+      for k,v in pairs(TOPGUN_FlightData.Flights) do
 
          print(prefix .. "------------");
          print(prefix .. "Flight no# " .. k);
@@ -67,8 +69,8 @@ SlashCmdList["TOPGUN"] = function(cmd)
 
       -- reset everything (FOR TESTING PURPOSES)
 
-      FlightData = nil;
-      _G["FlightData"] = nil;
+      TOPGUN_FlightData = nil;
+      _G["TOPGUN_FlightData"] = nil;
 
       print(prefix .. "All data reset.");
 

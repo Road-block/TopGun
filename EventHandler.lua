@@ -2,9 +2,9 @@
 --    DATE: 19-10-19
 --  AUTHOR: Vitruvius
 -- PURPOSE: Handle Events...
-
-local TOPGUN_Version = 1.3;
-local TOPGUN_SubVersion = 8;
+local addonName, addon = ...
+local TOPGUN_Version = 1.4;
+local TOPGUN_SubVersion = 0;
 
 local prefix = "\124cFFFF0066[TopGun] \124cFFFFFFFF";
 
@@ -14,33 +14,33 @@ local TopGunEventFrame = CreateFrame("Frame",nil,UIParent); -- for events
 
 local Event_Handler = function(self,event,...)
 
-   if (event == "VARIABLES_LOADED") then
+   if (event == "ADDON_LOADED") and (... == addonName) then
 
       -- check for saved data
 
-      if not FlightData then
+      if not TOPGUN_FlightData then
 
          -- create the database
 
-         FlightData = {};
+         TOPGUN_FlightData = {};
 
-         FlightData.Version = TOPGUN_Version;
-         FlightData.SubVersion = TOPGUN_SubVersion;
+         TOPGUN_FlightData.Version = TOPGUN_Version;
+         TOPGUN_FlightData.SubVersion = TOPGUN_SubVersion;
 
-         FlightData.TotalSpent = 0;
-         FlightData.TotalFlights = 0;
-         FlightData.TotalTime = 0;
-         FlightData.IsFlying = false;
+         TOPGUN_FlightData.TotalSpent = 0;
+         TOPGUN_FlightData.TotalFlights = 0;
+         TOPGUN_FlightData.TotalTime = 0;
+         TOPGUN_FlightData.IsFlying = false;
 
-         FlightData.Flights = {};
-         FlightData.ZoneStats = {};        
+         TOPGUN_FlightData.Flights = {};
+         TOPGUN_FlightData.ZoneStats = {};
 
       else
 
-         FlightData.Version = TOPGUN_Version;
-         FlightData.SubVersion = TOPGUN_SubVersion;
+         TOPGUN_FlightData.Version = TOPGUN_Version;
+         TOPGUN_FlightData.SubVersion = TOPGUN_SubVersion;
 
-      end -- NO FlightData
+      end -- NO TOPGUN_FlightData
 
       if not TOPGUN_GlobalData then
 
@@ -65,15 +65,15 @@ local Event_Handler = function(self,event,...)
          TOPGUN_GlobalData.Settings.ShowTimer = true;
          TOPGUN_GlobalData.Settings.ShowLearningBar = true;
 
-         FlightData.Settings = nil; -- DELETE THE OLD SETTINGS
+         TOPGUN_FlightData.Settings = nil; -- DELETE THE OLD SETTINGS
 
          -- get their flight data
 
          TOPGUN_GlobalData.FlightTimes = {};
 
-         if FlightData.FlightTimes then
+         if TOPGUN_FlightData.FlightTimes then
 
-            for k,v in pairs(FlightData.FlightTimes) do
+            for k,v in pairs(TOPGUN_FlightData.FlightTimes) do
 
                TOPGUN_GlobalData.FlightTimes[k] = {};
 
@@ -85,7 +85,7 @@ local Event_Handler = function(self,event,...)
 
             end -- k,v
 
-         FlightData.FlightTimes = nil; -- DELETE THE OLD WAY WE USED TO SAVE FLIGHT TIMES
+         TOPGUN_FlightData.FlightTimes = nil; -- DELETE THE OLD WAY WE USED TO SAVE FLIGHT TIMES
 
          end -- existing flight times
 
@@ -94,7 +94,7 @@ local Event_Handler = function(self,event,...)
       -- everything loaded
       print(prefix .. "Welcome to TopGun v" .. TOPGUN_Version .. "." .. TOPGUN_SubVersion);
       print(prefix .. "Type /topgun or /tg to open");
-
+      TopGunEventFrame:UnregisterEvent("ADDON_LOADED")
    end -- VARIABLES_LOADED
 
    --____________________________________________________________
@@ -125,6 +125,8 @@ local Event_Handler = function(self,event,...)
 
       end
 
+      TOPGUN_SettingsGUI.SetToTaxi();
+
    end -- TAXIMAP_OPENED  
 
    --____________________________________________________________
@@ -146,7 +148,7 @@ local Event_Handler = function(self,event,...)
 
       -- update saved variables
 
-      _G["FlightData"] = FlightData; 
+      _G["TOPGUN_FlightData"] = TOPGUN_FlightData;
 
    end -- PLAYER_LOGOUT
 
@@ -154,7 +156,7 @@ end -- Event_Handler()
 
 --______________________________________________________________________________________________________
 
-TopGunEventFrame:RegisterEvent("VARIABLES_LOADED")
+TopGunEventFrame:RegisterEvent("ADDON_LOADED")
 TopGunEventFrame:RegisterEvent("TAXIMAP_OPENED");
 TopGunEventFrame:RegisterEvent("TAXIMAP_CLOSED");
 TopGunEventFrame:RegisterEvent("PLAYER_LOGOUT");

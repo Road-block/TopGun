@@ -4,6 +4,7 @@
 -- PURPOSE: Create List of Flight Paths
 
 local Flights = {}; -- the list of available flights, filled on Update
+local sortedFlights = {};
 
 --______________________________________________________________________________________________________
 
@@ -114,6 +115,20 @@ local function TOPGUN_CreateFlightListGUI()
       frame.Toggle();
       frame:ClearAllPoints();
       frame:SetPoint("TOPLEFT",TaxiFrame,"TOPRIGHT",-34,-12);
+      frame:SetPoint("BOTTOMLEFT",TaxiFrame,"BOTTOMRIGHT",-34,75);
+
+   end
+
+   --______________________________________________________________
+
+   frame.SetToStandalone = function(self)
+
+      -- show the flight list
+
+      frame.Toggle();
+      frame:ClearAllPoints();
+      frame:SetPoint("TOPLEFT",TOPGUN_StandaloneGUI,"TOPRIGHT",0,0);
+      frame:SetPoint("BOTTOMLEFT",TOPGUN_StandaloneGUI,"BOTTOMRIGHT",0,0);
 
    end
 
@@ -145,7 +160,7 @@ TOPGUN_FlightListGUI.Update = function(frame)
 
    -- restart our available flight list
 
-   Flights = {};
+   Flights = wipe(Flights or {});
 
    -- holder frame, actually holds the content
 
@@ -163,7 +178,7 @@ TOPGUN_FlightListGUI.Update = function(frame)
 
    -- sort the list alphabetically
 
-   local sortedFlights = {};
+   sortedFlights = wipe(sortedFlights or {});
    for n in pairs(Flights) do table.insert(sortedFlights, n) end;
    table.sort(sortedFlights);
    
@@ -177,7 +192,7 @@ TOPGUN_FlightListGUI.Update = function(frame)
 
       -- create the individual box
 
-      content.box = CreateFrame("Button",nil,content);
+      content.box = CreateFrame("Button",nil,content, BackdropTemplateMixin and "BackdropTemplate" or nil);
       content.box:SetWidth(content:GetWidth()-2);
       content.box:SetHeight(25);
       -- the box's vertical position in the list
