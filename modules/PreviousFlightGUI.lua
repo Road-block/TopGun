@@ -7,7 +7,14 @@ local ForwardBtn;
 local BackBtn;
 local UpdatePreviousFlightFrame;
 local CurrentFlight = 1;
-
+--______________________________________________________________________________________________________
+local GetCoinTextureString = function(...)
+   if _G.GetCoinTextureString then
+      return _G.GetCoinTextureString(...)
+   elseif C_CurrencyInfo and C_CurrencyInfo.GetCoinTextureString then
+      return C_CurrencyInfo.GetCoinTextureString(...)
+   end
+end
 --______________________________________________________________________________________________________
 
 local function TOPGUN_CreatePreviousFlightGUI() 

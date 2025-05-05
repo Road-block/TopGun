@@ -48,6 +48,7 @@
             1.4.0 - change perchar variable name to avoid naming collisions
                   - cataclysm classic updates
                   - third-party addons compatibility improvements
+						1.4.1 - mop classic updates
 ]]
 
 TOPGUN_FlightListWidth = 220;
@@ -86,6 +87,15 @@ TOPGUN_FlightTimeFrame.txt:SetPoint("RIGHT",TOPGUN_FlightTimeFrame,-5,0);
 TOPGUN_FlightTimeFrame.txt:SetText("none");
 
 TOPGUN_FlightTimeFrame:Hide();
+
+--______________________________________________________________________________________________________
+local GetCoinTextureString = function(...)
+   if _G.GetCoinTextureString then
+      return _G.GetCoinTextureString(...)
+   elseif C_CurrencyInfo and C_CurrencyInfo.GetCoinTextureString then
+      return C_CurrencyInfo.GetCoinTextureString(...)
+   end
+end
 
 --______________________________________________________________________________________________________
 

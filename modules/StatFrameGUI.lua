@@ -4,6 +4,14 @@
 -- PURPOSE: Create Stat Frame GUI
 
 --______________________________________________________________________________________________________
+local GetCoinTextureString = function(...)
+   if _G.GetCoinTextureString then
+      return _G.GetCoinTextureString(...)
+   elseif C_CurrencyInfo and C_CurrencyInfo.GetCoinTextureString then
+      return C_CurrencyInfo.GetCoinTextureString(...)
+   end
+end
+--______________________________________________________________________________________________________
 
 local function ReturnFormattedTime(time)
 

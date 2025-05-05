@@ -514,7 +514,7 @@ local function TOPGUN_CreateSettingsGUI()
       end
 
       local r,g,b,a
-      if color then
+      if type(color)=="table" then
          r,g,b,a = unpack(color)
       else
          r,g,b = ColorPickerFrame:GetColorRGB()
@@ -559,12 +559,26 @@ local function TOPGUN_CreateSettingsGUI()
          local a = TOPGUN_GlobalData.Settings.TimerColour.a;
 
          -- show the colour picker
-         ColorPickerFrame:SetColorRGB(r,g,b)
-         ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (a ~= nil), a
-         ColorPickerFrame.previousValues = {r,g,b,a}
-         ColorPickerFrame.func, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc = UpdateTextureColour, UpdateTextureColour, UpdateTextureColour;
-         ColorPickerFrame:Hide() -- Need to run the OnShow handler.
-         ColorPickerFrame:Show()
+         if ColorPickerFrame.SetupColorPickerAndShow then
+            local info = {}
+            info.r = r
+            info.g = g
+            info.b = b
+            info.hasOpacity = a ~= nil
+            info.opacity = a
+            info.swatchFunc = UpdateTextureColour
+            info.opacityFunc = UpdateTextureColour
+            info.cancelFunc = UpdateTextureColour
+            ColorPickerFrame:SetupColorPickerAndShow(info)
+         else
+            ColorPickerFrame:SetColorRGB(r,g,b)
+            ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (a ~= nil), a
+            ColorPickerFrame.previousValues = {r,g,b,a}
+            ColorPickerFrame.func, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc = UpdateTextureColour, UpdateTextureColour, UpdateTextureColour;
+            ColorPickerFrame.swatchFunc = ColorPickerFrame.func
+            ColorPickerFrame:Hide() -- Need to run the OnShow handler.
+            ColorPickerFrame:Show()
+         end
 
       end
    end)
@@ -582,7 +596,7 @@ local function TOPGUN_CreateSettingsGUI()
       end
 
       local r,g,b,a
-      if color then
+      if type(color)=="table" then
          r,g,b,a = unpack(color)
       else
          r,g,b = ColorPickerFrame:GetColorRGB()
@@ -623,12 +637,26 @@ local function TOPGUN_CreateSettingsGUI()
          local a = TOPGUN_GlobalData.Settings.TimerFontColour.a;
 
          -- show the colour picker
-         ColorPickerFrame:SetColorRGB(r,g,b)
-         ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (a ~= nil), a
-         ColorPickerFrame.previousValues = {r,g,b,a}
-         ColorPickerFrame.func, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc = UpdateFontColour, UpdateFontColour, UpdateFontColour;
-         ColorPickerFrame:Hide() -- Need to run the OnShow handler.
-         ColorPickerFrame:Show()
+         if ColorPickerFrame.SetupColorPickerAndShow then
+            local info = {}
+            info.r = r
+            info.g = g
+            info.b = b
+            info.hasOpacity = a ~= nil
+            info.opacity = a
+            info.swatchFunc = UpdateFontColour
+            info.opacityFunc = UpdateFontColour
+            info.cancelFunc = UpdateFontColour
+            ColorPickerFrame:SetupColorPickerAndShow(info)
+         else
+            ColorPickerFrame:SetColorRGB(r,g,b)
+            ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (a ~= nil), a
+            ColorPickerFrame.previousValues = {r,g,b,a}
+            ColorPickerFrame.func, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc = UpdateFontColour, UpdateFontColour, UpdateFontColour;
+            ColorPickerFrame.swatchFunc = ColorPickerFrame.func
+            ColorPickerFrame:Hide() -- Need to run the OnShow handler.
+            ColorPickerFrame:Show()
+         end
 
       end
    end)

@@ -1,4 +1,4 @@
-## Interface: 50500,40402,11507
+## Interface: 50500
 ## Author: Vitruvius
 ## X-Credits: Roadblock
 ## Title: TopGun |T132262:16|t
@@ -24,6 +24,3 @@ modules\PreviousFlightGUI.lua
 modules\SettingsGUI.lua
 modules\AdvancedSettingsGUI.lua
 modules\StandaloneGUI.lua
-
-
-
