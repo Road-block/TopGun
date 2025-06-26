@@ -2,7 +2,7 @@
 --    DATE: 29-10-19
 --  AUTHOR: Vitruvius
 -- PURPOSE: Load some pre-set flight times into TOPGUN_GlobalData.FlightTimes
-local addonName, addon = ...
+local addonName, TG = ...
 local PreloadFrame = CreateFrame("Frame",nil,UIParent); -- for events
 
 local PresavedData = {};

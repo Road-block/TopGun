@@ -2,6 +2,7 @@
 --    DATE: 19-10-19
 --  AUTHOR: Vitruvius
 -- PURPOSE: Create List of Flight Paths
+local addonName, TG = ...
 
 local Flights = {}; -- the list of available flights, filled on Update
 local sortedFlights = {};
@@ -111,11 +112,11 @@ local function TOPGUN_CreateFlightListGUI()
    frame.SetToTaxi = function(self)
 
       -- show the flight list
-
+      local anchor = TG.taxiMapFrame or TaxiFrame
       frame.Toggle();
       frame:ClearAllPoints();
-      frame:SetPoint("TOPLEFT",TaxiFrame,"TOPRIGHT",-34,-12);
-      frame:SetPoint("BOTTOMLEFT",TaxiFrame,"BOTTOMRIGHT",-34,75);
+      frame:SetPoint("TOPLEFT",anchor,"TOPRIGHT",8,22)-- -34,-12);
+      frame:SetPoint("BOTTOMLEFT",anchor,"BOTTOMRIGHT",10,0)-- -34,75);
 
    end
 

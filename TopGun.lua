@@ -51,6 +51,9 @@
 						1.4.1 - mop classic updates
 ]]
 
+local addonName, TG = ...
+TG.taxiMapFrame = _G.TaxiRouteMap or _G.TaxiMap -- MoP compat
+
 TOPGUN_FlightListWidth = 220;
 
 TOPGUN_FlightTimeFrame = CreateFrame("StatusBar","TOPGUN_FlightTimeFrame",UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil); -- flight timer bar

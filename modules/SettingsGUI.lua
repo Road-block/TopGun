@@ -2,6 +2,7 @@
 --    DATE: 19-10-19
 --  AUTHOR: Vitruvius
 -- PURPOSE: Create Settings GUI
+local addonName, TG = ...
 
 -- these locals are so i can update these widgets in TOPGUN_SettingsGUI.Update()
 
@@ -37,11 +38,12 @@ TESTBAR:SetScript("OnDragStop",TESTBAR.StopMovingOrSizing)
 
 TESTBAR:Hide();
 
+local anchor = TG.taxiMapFrame or TaxiFrame
 -- Settings Button
-SettingsBtn = CreateFrame("Button",nil,TaxiFrame,"GameMenuButtonTemplate");
+SettingsBtn = CreateFrame("Button",nil,anchor,"GameMenuButtonTemplate");
 SettingsBtn:SetWidth(125);
 SettingsBtn:SetHeight(22);
-SettingsBtn:SetPoint("TOP",TaxiFrame,0,-44);
+SettingsBtn:SetPoint("TOP",anchor,0,-10); -- -44);
 -- Setting button text
 SettingsBtn.txt = SettingsBtn:CreateFontString(nil,nil,"GameFontNormal");
 SettingsBtn.txt:SetPoint("CENTER",SettingsBtn);
@@ -677,7 +679,7 @@ local function TOPGUN_CreateSettingsGUI()
    frame.SetToTaxi = function(self)
 
       frame:ClearAllPoints();
-      frame:SetPoint("BOTTOMRIGHT",TaxiFrame,"BOTTOMRIGHT",-38,80);
+      frame:SetPoint("BOTTOMRIGHT",anchor,"BOTTOMRIGHT",-5,5);-- -38,80);
    end
    --______________________________________________________________
 

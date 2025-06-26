@@ -2,8 +2,8 @@
 --    DATE: 19-10-19
 --  AUTHOR: Vitruvius
 -- PURPOSE: Handle Events...
-local addonName, addon = ...
-local TOPGUN_Version = 1.4;
+local addonName, TG = ...
+local TOPGUN_Version = 1.5;
 local TOPGUN_SubVersion = 0;
 
 local prefix = "\124cFFFF0066[TopGun] \124cFFFFFFFF";
@@ -15,6 +15,10 @@ local TopGunEventFrame = CreateFrame("Frame",nil,UIParent); -- for events
 local Event_Handler = function(self,event,...)
 
    if (event == "ADDON_LOADED") and (... == addonName) then
+
+      EventUtil.ContinueOnAddOnLoaded("Blizzard_UIPanels_Game",function()
+         TG.taxiMapFrame = TaxiRouteMap or TaxiFrame
+      end)
 
       -- check for saved data
 

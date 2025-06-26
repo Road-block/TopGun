@@ -2,6 +2,7 @@
 --    DATE: 19-10-19
 --  AUTHOR: Vitruvius
 -- PURPOSE: Create Stat Frame GUI
+local addonName, TG = ...
 
 --______________________________________________________________________________________________________
 local GetCoinTextureString = function(...)
@@ -150,11 +151,11 @@ local function TOPGUN_CreateStatFrameGUI()
    frame.SetToTaxi = function(self)
 
       -- show the flight list
-
+      local anchor = TG.taxiMapFrame or TaxiFrame
       frame.Toggle();
       frame:ClearAllPoints();
-      frame:SetPoint("TOPLEFT",TaxiFrame,"BOTTOMLEFT",13,75);
-      frame:SetPoint("TOPRIGHT",TaxiFrame,"BOTTOMRIGHT",-35,75);
+      frame:SetPoint("TOPLEFT",anchor,"BOTTOMLEFT",-4,-2);-- 13,75);
+      frame:SetPoint("TOPRIGHT",anchor,"BOTTOMRIGHT",4,-2);-- -35,75);
 
    end
 

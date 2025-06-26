@@ -2,6 +2,7 @@
 --    DATE: 8-10-19
 --  AUTHOR: Vitruvius
 -- PURPOSE: Handle Slash Commands
+local addonName, TG = ...
 
 local prefix = "\124cFFFF0066<TopGun> \124cFFFFFFFF";
 
@@ -21,7 +22,7 @@ SlashCmdList["TOPGUN"] = function(cmd)
          return;
       end
 
-      if (TaxiMap:IsVisible()) then
+      if ( TG.taxiMapFrame and TG.taxiMapFrame:IsVisible()) then
 
          TOPGUN_SettingsGUI.Toggle();
 

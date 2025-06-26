@@ -4,6 +4,7 @@
 -- PURPOSE: Create Standalone GUI that opens on /topgun
 
 --______________________________________________________________________________________________________
+local addonName, TG = ...
 
 local function TOPGUN_CreateStandaloneGUI() 
 
@@ -39,10 +40,10 @@ local function TOPGUN_CreateStandaloneGUI()
    frame.SetToTaxi = function(self)
 
       -- show the flight list
-
+      local anchor = TG.taxiMapFrame or TaxiFrame
       frame.Toggle();
       frame:ClearAllPoints();
-      frame:SetPoint("TOPLEFT",TaxiFrame,"BOTTOMLEFT",13,75);
+      frame:SetPoint("TOPLEFT",anchor,"BOTTOMLEFT",13,75);
 
    end
 

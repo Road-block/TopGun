@@ -2,6 +2,7 @@
 --    DATE: 19-10-19
 --  AUTHOR: Vitruvius
 -- PURPOSE: Create Previous Flight GUI
+local addonName, TG = ...
 
 local ForwardBtn;
 local BackBtn;
@@ -144,10 +145,10 @@ local function TOPGUN_CreatePreviousFlightGUI()
    frame.SetToTaxi = function(self)
 
       -- show the flight list
-
+      local anchor = TG.taxiMapFrame or TaxiFrame
       frame.Toggle();
       frame:ClearAllPoints();
-      frame:SetPoint("TOPLEFT",TaxiFrame,"BOTTOMRIGHT",-33,75);
+      frame:SetPoint("TOPLEFT",anchor,"BOTTOMRIGHT",8,0)-- -33,75);
    end
 
    --______________________________________________________________
