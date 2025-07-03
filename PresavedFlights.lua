@@ -194,6 +194,9 @@ PresavedData.Horde = {
 
     } -- PresavedData
 
+PresavedData.Neutral = { }
+
+
 local function PreloadHandler(_,event,...)
 	if ... == addonName then
 	   -- fills flight times if player doesn't have

@@ -4,7 +4,7 @@
 ## Title: TopGun |T132262:16|t
 ## IconTexture: 132262
 ## Notes: All-in-one Flight Addon
-## Version : 1.5.0
+## Version : 1.5.1
 ## OptionalDeps:
 ## Dependencies:
 ## SavedVariables: TOPGUN_GlobalData

@@ -4,7 +4,7 @@
 -- PURPOSE: Handle Events...
 local addonName, TG = ...
 local TOPGUN_Version = 1.5;
-local TOPGUN_SubVersion = 0;
+local TOPGUN_SubVersion = 1;
 
 local prefix = "\124cFFFF0066[TopGun] \124cFFFFFFFF";
 
